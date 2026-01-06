@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BA Reward Ticket Monitor</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header>
+        <h1>BA Reward Ticket Monitor</h1>
+        <p>Monitor British Airways reward availability and receive email alerts.</p>
+      </header>
+
+      <section class="panel">
+        <h2>Routes</h2>
+        <form id="route-form" class="grid">
+          <input type="hidden" id="route-id" />
+          <label>
+            Origin
+            <input id="origin" required placeholder="LHR" />
+          </label>
+          <label>
+            Destination
+            <input id="destination" required placeholder="JFK" />
+          </label>
+          <label>
+            Start Date
+            <input id="start-date" type="date" required />
+          </label>
+          <label>
+            End Date
+            <input id="end-date" type="date" required />
+          </label>
+          <label>
+            Cabin Class
+            <input id="cabin-class" required placeholder="Business" />
+          </label>
+          <button type="submit" id="save-route">Save Route</button>
+          <button type="button" id="reset-route" class="secondary">Reset</button>
+        </form>
+        <div class="table-wrapper">
+          <table id="routes-table">
+            <thead>
+              <tr>
+                <th>Origin</th>
+                <th>Destination</th>
+                <th>Dates</th>
+                <th>Cabin</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Scraping Settings</h2>
+        <form id="settings-form" class="grid">
+          <label>
+            Poll Interval (minutes)
+            <input id="poll-interval" type="number" min="1" />
+          </label>
+          <label>
+            BA Search URL Template
+            <input
+              id="url-template"
+              required
+              placeholder="https://...{origin}...{destination}...{date}...{cabin}"
+            />
+          </label>
+          <label>
+            Availability Regex
+            <input id="availability-regex" required placeholder="Available" />
+          </label>
+          <label>
+            Request Headers (JSON)
+            <textarea id="request-headers" rows="3" placeholder='{ "User-Agent": "Mozilla/5.0" }'></textarea>
+          </label>
+          <label>
+            Request Cookies (JSON)
+            <textarea id="request-cookies" rows="3" placeholder='{ "cookie_name": "value" }'></textarea>
+          </label>
+          <button type="submit">Save Settings</button>
+        </form>
+      </section>
+
+      <section class="panel">
+        <h2>Email Settings</h2>
+        <form id="email-form" class="grid">
+          <label>
+            SMTP Host
+            <input id="smtp-host" />
+          </label>
+          <label>
+            SMTP Port
+            <input id="smtp-port" type="number" min="1" />
+          </label>
+          <label>
+            SMTP User
+            <input id="smtp-user" />
+          </label>
+          <label>
+            SMTP Password
+            <input id="smtp-password" type="password" />
+          </label>
+          <label>
+            From Email
+            <input id="smtp-from" />
+          </label>
+          <label>
+            To Email
+            <input id="smtp-to" />
+          </label>
+          <label class="inline">
+            <input id="smtp-tls" type="checkbox" />
+            Use TLS
+          </label>
+          <button type="submit">Save Email Settings</button>
+        </form>
+      </section>
+
+      <section class="panel">
+        <h2>Manual Check</h2>
+        <button id="run-check">Run Availability Check</button>
+        <pre id="check-output"></pre>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
