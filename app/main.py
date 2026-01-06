@@ -26,7 +26,7 @@ from .config import (
     save_state,
 )
 from .notifier import send_email
-from .scraper import check_availability
+from .scraper import build_search_url, check_availability
 
 
 class RoutePayload(BaseModel):
@@ -68,6 +68,9 @@ class CheckResult(BaseModel):
     available: bool
     url: str
     matched_text: Optional[str]
+    status_code: Optional[int] = None
+    response_snippet: Optional[str] = None
+    error: Optional[str] = None
 
 
 app = FastAPI()
@@ -97,6 +100,13 @@ def run_checks() -> List[CheckResult]:
         current_config = config
     for route in current_config.routes:
         for travel_date in dates_between(route.start_date, route.end_date):
+            url = build_search_url(
+                current_config.scrape,
+                route.origin,
+                route.destination,
+                travel_date,
+                route.cabin_class,
+            )
             try:
                 availability = check_availability(
                     current_config.scrape,
@@ -105,7 +115,18 @@ def run_checks() -> List[CheckResult]:
                     travel_date,
                     route.cabin_class,
                 )
-            except Exception:
+            except Exception as exc:
+                results.append(
+                    CheckResult(
+                        route_id=route.id,
+                        date=travel_date,
+                        cabin_class=route.cabin_class,
+                        available=False,
+                        url=url,
+                        matched_text=None,
+                        error=str(exc),
+                    )
+                )
                 continue
             result = CheckResult(
                 route_id=route.id,
@@ -114,6 +135,9 @@ def run_checks() -> List[CheckResult]:
                 available=availability.available,
                 url=availability.url,
                 matched_text=availability.matched_text,
+                status_code=availability.status_code,
+                response_snippet=availability.response_snippet,
+                error=availability.error,
             )
             results.append(result)
             if availability.available:
