@@ -25,7 +25,6 @@ The app uses a configurable British Airways reward search URL template and an av
 
 - `BA Search URL Template` should contain `{origin}`, `{destination}`, `{date}`, and `{cabin}` placeholders.
 - `Availability Regex` should match text that appears when reward seats are available.
-- `Blocked Page Regexes` are patterns that indicate the response is a login page, bot check, or access block.
 - `Request Headers` / `Request Cookies` can include session cookies or auth tokens if required.
 
 Example template:
@@ -37,14 +36,6 @@ https://www.britishairways.com/travel/redeem/execclub/_gf/en_gb?from={origin}&to
 ## Email
 
 Fill in SMTP details under **Email Settings**. If SMTP is not configured, email notifications are skipped.
-
-## Troubleshooting Availability
-
-Some British Airways pages are rendered with JavaScript or require login/cookies. If the scraper does not detect availability:
-
-1. Run **Manual Check** and review the JSON output. The response includes `status_code`, `title`, and `blocked_reason`.
-2. If `blocked_reason` matches a login/bot pattern, add authenticated cookies/headers via the UI.
-3. Update the `Availability Regex` to match the exact text shown on the reward availability page.
 
 ## Files
 

@@ -40,16 +40,6 @@ class ScrapeConfig:
         "?from={origin}&to={destination}&outboundDate={date}&cabin={cabin}"
     )
     availability_regex: str = "Available"
-    blocked_regexes: List[str] = field(
-        default_factory=lambda: [
-            "sign in",
-            "log in",
-            "access denied",
-            "robot",
-            "enable javascript",
-            "verify you are a human",
-        ]
-    )
     request_headers: Dict[str, str] = field(default_factory=dict)
     request_cookies: Dict[str, str] = field(default_factory=dict)
 

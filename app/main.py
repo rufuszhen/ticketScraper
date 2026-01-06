@@ -52,7 +52,6 @@ class ScrapePayload(BaseModel):
     poll_interval_minutes: int = 5
     ba_search_url_template: str
     availability_regex: str
-    blocked_regexes: list[str] = Field(default_factory=list)
     request_headers: dict = Field(default_factory=dict)
     request_cookies: dict = Field(default_factory=dict)
 
@@ -69,11 +68,6 @@ class CheckResult(BaseModel):
     available: bool
     url: str
     matched_text: Optional[str]
-    status_code: Optional[int] = None
-    blocked_reason: Optional[str] = None
-    title: Optional[str] = None
-    error: Optional[str] = None
-    text_sample: Optional[str] = None
 
 
 app = FastAPI()
@@ -111,18 +105,7 @@ def run_checks() -> List[CheckResult]:
                     travel_date,
                     route.cabin_class,
                 )
-            except Exception as exc:
-                results.append(
-                    CheckResult(
-                        route_id=route.id,
-                        date=travel_date,
-                        cabin_class=route.cabin_class,
-                        available=False,
-                        url="",
-                        matched_text=None,
-                        error=str(exc),
-                    )
-                )
+            except Exception:
                 continue
             result = CheckResult(
                 route_id=route.id,
@@ -131,10 +114,6 @@ def run_checks() -> List[CheckResult]:
                 available=availability.available,
                 url=availability.url,
                 matched_text=availability.matched_text,
-                status_code=availability.status_code,
-                blocked_reason=availability.blocked_reason,
-                title=availability.title,
-                text_sample=availability.text_sample,
             )
             results.append(result)
             if availability.available:
