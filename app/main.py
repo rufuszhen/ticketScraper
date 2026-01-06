@@ -52,6 +52,7 @@ class ScrapePayload(BaseModel):
     poll_interval_minutes: int = 5
     ba_search_url_template: str
     availability_regex: str
+    availability_json_keys: List[str] = Field(default_factory=list)
     request_headers: dict = Field(default_factory=dict)
     request_cookies: dict = Field(default_factory=dict)
 

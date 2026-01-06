@@ -40,6 +40,16 @@ class ScrapeConfig:
         "?from={origin}&to={destination}&outboundDate={date}&cabin={cabin}"
     )
     availability_regex: str = "Available"
+    availability_json_keys: List[str] = field(
+        default_factory=lambda: [
+            "available",
+            "availability",
+            "rewardAvailable",
+            "reward_available",
+            "seatAvailable",
+            "seatsAvailable",
+        ]
+    )
     request_headers: Dict[str, str] = field(default_factory=dict)
     request_cookies: Dict[str, str] = field(default_factory=dict)
 

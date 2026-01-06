@@ -56,6 +56,9 @@ function populateSettings(config) {
     config.scrape?.ba_search_url_template ?? "";
   document.getElementById("availability-regex").value =
     config.scrape?.availability_regex ?? "";
+  document.getElementById("availability-json-keys").value = (
+    config.scrape?.availability_json_keys ?? []
+  ).join(", ");
   document.getElementById("request-headers").value = JSON.stringify(
     config.scrape?.request_headers ?? {},
     null,
@@ -141,6 +144,11 @@ settingsForm.addEventListener("submit", async (event) => {
       availability_regex: document
         .getElementById("availability-regex")
         .value.trim(),
+      availability_json_keys: document
+        .getElementById("availability-json-keys")
+        .value.split(",")
+        .map((entry) => entry.trim())
+        .filter(Boolean),
       request_headers: JSON.parse(
         document.getElementById("request-headers").value || "{}"
       ),

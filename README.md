@@ -25,6 +25,7 @@ The app uses a configurable British Airways reward search URL template and an av
 
 - `BA Search URL Template` should contain `{origin}`, `{destination}`, `{date}`, and `{cabin}` placeholders.
 - `Availability Regex` should match text that appears when reward seats are available.
+- `Availability JSON Keys` lets you specify JSON fields that indicate availability when BA returns JSON (comma-separated).
 - `Request Headers` / `Request Cookies` can include session cookies or auth tokens if required.
 
 Example template:
